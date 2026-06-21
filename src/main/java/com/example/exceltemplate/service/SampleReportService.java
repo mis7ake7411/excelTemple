@@ -37,17 +37,28 @@ public class SampleReportService {
 
     public void writeSampleReport(OutputStream outputStream) {
         SXSSFWorkbook workbook = workbookBuilder.build(dataProvider.findRows());
+        ExcelTemplateException reportFailure = null;
         try {
             workbook.write(outputStream);
         } catch (IOException ex) {
-            throw new ExcelTemplateException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.REPORT_GENERATION_FAILED);
+            reportFailure = createReportGenerationException(ex);
+            throw reportFailure;
         } finally {
             try {
                 workbook.close();
-            } catch (IOException ignore) {
-                // 先保留原始例外，dispose 仍需執行。
+            } catch (IOException ex) {
+                if (reportFailure != null) {
+                    reportFailure.addSuppressed(ex);
+                } else {
+                    throw createReportGenerationException(ex);
+                }
+            } finally {
+                workbook.dispose();
             }
-            workbook.dispose();
         }
+    }
+
+    private ExcelTemplateException createReportGenerationException(IOException ex) {
+        return new ExcelTemplateException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.REPORT_GENERATION_FAILED, ex);
     }
 }

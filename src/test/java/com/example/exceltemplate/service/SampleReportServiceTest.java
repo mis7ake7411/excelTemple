@@ -1,5 +1,7 @@
 package com.example.exceltemplate.service;
 
+import com.example.exceltemplate.common.exception.ErrorCode;
+import com.example.exceltemplate.common.exception.ExcelTemplateException;
 import com.example.exceltemplate.model.ReportDownload;
 import com.example.exceltemplate.model.SampleReportDefinition;
 import com.example.exceltemplate.report.excel.SampleReportWorkbookBuilderImpl;
@@ -9,8 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SampleReportServiceTest {
@@ -34,6 +40,31 @@ class SampleReportServiceTest {
         service.writeSampleReport(outputStream);
 
         assertWorkbookCanBeOpened(outputStream.toByteArray());
+    }
+
+    @Test
+    void shouldWrapWriteIOExceptionWithReportGenerationError() throws IOException {
+        IOException writeFailure = new IOException("write failed");
+        ExcelTemplateException exception;
+        try (OutputStream outputStream = new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                throw writeFailure;
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) throws IOException {
+                throw writeFailure;
+            }
+        }) {
+
+            exception = assertThrows(
+                    ExcelTemplateException.class,
+                    () -> service.writeSampleReport(outputStream));
+        }
+
+        assertEquals(ErrorCode.REPORT_GENERATION_FAILED.getCode(), exception.getCode());
+        assertSame(writeFailure, exception.getCause());
     }
 
     @Test

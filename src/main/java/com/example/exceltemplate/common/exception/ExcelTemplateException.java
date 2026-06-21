@@ -11,8 +11,16 @@ public class ExcelTemplateException extends RuntimeException {
         this(status, errorCode.getCode(), errorCode.getMessage());
     }
 
+    public ExcelTemplateException(HttpStatus status, ErrorCode errorCode, Throwable cause) {
+        this(status, errorCode.getCode(), errorCode.getMessage(), cause);
+    }
+
     public ExcelTemplateException(HttpStatus status, String code, String message) {
-        super(message);
+        this(status, code, message, null);
+    }
+
+    public ExcelTemplateException(HttpStatus status, String code, String message, Throwable cause) {
+        super(message, cause);
         this.status = status;
         this.code = code;
     }
