@@ -2,6 +2,9 @@ package com.example.exceltemplate.report.excel;
 
 import com.example.exceltemplate.model.SampleReportDefinition;
 import com.example.exceltemplate.model.SampleReportRow;
+import com.example.exceltemplate.report.sample.SampleReportColumns;
+import com.example.exceltemplate.report.sample.SampleReportWorkbookBuilder;
+import com.example.exceltemplate.report.sample.SampleReportWorkbookBuilderImpl;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,9 @@ class SampleReportWorkbookBuilderTest {
     private final SampleReportDefinition reportDefinition = new SampleReportDefinition(
             "Custom Sheet",
             Arrays.asList("Column A", "Column B", "Column C"));
-    private final SampleReportWorkbookBuilder builder = new SampleReportWorkbookBuilderImpl(reportDefinition);
+    private final SampleReportColumns sampleReportColumns = new SampleReportColumns();
+    private final ReportWorkbookBuilder reportWorkbookBuilder = new PoiReportWorkbookBuilder();
+    private final SampleReportWorkbookBuilder builder = new SampleReportWorkbookBuilderImpl(reportDefinition, sampleReportColumns, reportWorkbookBuilder);
 
     @Test
     void shouldCreateWorkbookWithConfiguredSheetNameAndHeaders() throws Exception {

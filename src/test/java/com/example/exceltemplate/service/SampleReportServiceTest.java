@@ -4,7 +4,9 @@ import com.example.exceltemplate.common.exception.ErrorCode;
 import com.example.exceltemplate.common.exception.ExcelTemplateException;
 import com.example.exceltemplate.model.ReportDownload;
 import com.example.exceltemplate.model.SampleReportDefinition;
-import com.example.exceltemplate.report.excel.SampleReportWorkbookBuilderImpl;
+import com.example.exceltemplate.report.excel.PoiReportWorkbookBuilder;
+import com.example.exceltemplate.report.sample.SampleReportColumns;
+import com.example.exceltemplate.report.sample.SampleReportWorkbookBuilderImpl;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.junit.jupiter.api.Test;
@@ -22,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class SampleReportServiceTest {
 
     private final SampleReportService service = new SampleReportService(
-            new SampleReportWorkbookBuilderImpl(new SampleReportDefinition()),
+            new SampleReportWorkbookBuilderImpl(new SampleReportDefinition(), new SampleReportColumns(), new PoiReportWorkbookBuilder()),
             new SampleReportDataProviderImpl());
 
     @Test

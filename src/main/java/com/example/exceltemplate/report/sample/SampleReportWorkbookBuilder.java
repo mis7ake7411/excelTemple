@@ -1,4 +1,4 @@
-package com.example.exceltemplate.report.excel;
+package com.example.exceltemplate.report.sample;
 
 import com.example.exceltemplate.model.SampleReportRow;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;

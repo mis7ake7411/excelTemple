@@ -3,7 +3,7 @@ package com.example.exceltemplate.service;
 import com.example.exceltemplate.common.exception.ErrorCode;
 import com.example.exceltemplate.common.exception.ExcelTemplateException;
 import com.example.exceltemplate.model.ReportDownload;
-import com.example.exceltemplate.report.excel.SampleReportWorkbookBuilder;
+import com.example.exceltemplate.report.sample.SampleReportWorkbookBuilder;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
